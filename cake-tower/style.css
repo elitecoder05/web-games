@@ -5,7 +5,6 @@
     touch-action: manipulation;
 }
 
-/* Mobile browser optimizations */
 html {
     height: 100%;
     height: -webkit-fill-available;
@@ -14,8 +13,8 @@ html {
 body {
     font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
     background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
-    min-height: 100vh; /* Ensure full viewport height */
-    min-height: -webkit-fill-available; /* Safari specific */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,10 +26,10 @@ body {
 }
 
 .game-container {
-    width: 100vw; /* Full viewport width */
-    max-width: 500px; /* Max width for larger screens */
-    height: 100vh; /* Full viewport height */
-    height: -webkit-fill-available; /* Safari specific */
+    width: 100vw;
+    max-width: 500px;
+    height: 100vh;
+    height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -48,7 +47,7 @@ body {
     border-bottom: 4px solid #ff7e94;
     box-shadow: 0 2px 10px rgba(255, 126, 148, 0.3);
     min-height: 60px;
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
 }
 
 .game-header h1 {
@@ -77,23 +76,23 @@ body {
     flex: 1;
     background: linear-gradient(180deg, #ffeef6 0%, #ffe0f0 25%, #fff0f8 50%, #fdf2ff 75%, #f8f0ff 100%);
     width: 100%;
-    min-height: 0; /* Allow canvas to shrink */
+    min-height: 0;
     display: block;
     box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .game-controls {
-    padding: 12px 15px 20px 15px; /* Added extra bottom padding */
+    padding: 12px 15px 20px 15px;
     text-align: center;
     background: linear-gradient(to right, #FF9AA2, #FFB7B2);
     border-top: 4px solid #ff7e94;
     box-shadow: 0 -2px 10px rgba(255, 126, 148, 0.3);
     min-height: 70px;
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: env(safe-area-inset-bottom, 20px); /* Safe area for phones with notches */
+    padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 .tap-button {
@@ -109,7 +108,7 @@ body {
     transition: all 0.2s;
     text-transform: uppercase;
     letter-spacing: 1px;
-    min-height: 44px; /* iOS minimum touch target */
+    min-height: 44px;
     min-width: 200px;
 }
 
@@ -160,7 +159,6 @@ body::after {
     50% { transform: translateY(-15px) rotate(5deg); }
 }
 
-/* Mobile Specific Styles */
 @media screen and (max-width: 480px) {
     html, body {
         height: 100%;
@@ -168,31 +166,30 @@ body::after {
     }
     
     body {
-        justify-content: flex-start; /* Align to top instead of center */
+        justify-content: flex-start;
     }
     
     .game-container {
         width: 100vw;
         height: 100vh;
-        height: 100%; /* Fallback for older browsers */
+        height: 100%;
         max-width: none;
         border-radius: 0;
         box-shadow: none;
-        padding-bottom: env(safe-area-inset-bottom, 0px); /* Safe area padding */
+        padding-bottom: env(safe-area-inset-bottom, 0px);
     }
     
     #gameCanvas {
-        /* Calculate height: full viewport minus header and controls with extra space */
-        height: calc(100vh - 130px); /* 50px header + 80px controls (with extra padding) */
-        height: calc(100% - 130px); /* Fallback */
-        flex: none; /* Don't use flex grow on mobile */
+        height: calc(100vh - 130px);
+        height: calc(100% - 130px);
+        flex: none;
     }
     
     .game-header {
         padding: 6px 12px;
         min-height: 50px;
         max-height: 50px;
-        padding-top: env(safe-area-inset-top, 6px); /* Safe area for top */
+        padding-top: env(safe-area-inset-top, 6px);
     }
     
     .game-header h1 {
@@ -205,8 +202,8 @@ body::after {
     }
     
     .game-controls {
-        padding: 8px 12px 25px 12px; /* Extra bottom padding for mobile */
-        min-height: 80px; /* Increased height to accommodate padding */
+        padding: 8px 12px 25px 12px;
+        min-height: 80px;
         max-height: 80px;
     }
     
@@ -215,7 +212,7 @@ body::after {
         font-size: 0.8rem;
         min-width: 180px;
         min-height: 40px;
-        margin-bottom: 5px; /* Small margin to lift button up */
+        margin-bottom: 5px;
     }
     
     .perfect-message {
@@ -224,18 +221,17 @@ body::after {
     }
 }
 
-/* Small Mobile Devices */
 @media screen and (max-width: 360px) {
     #gameCanvas {
-        height: calc(100vh - 120px); /* Adjusted for increased controls height */
-        height: calc(100% - 120px); /* Fallback */
+        height: calc(100vh - 120px);
+        height: calc(100% - 120px);
     }
     
     .game-header {
         min-height: 45px;
         max-height: 45px;
         padding: 4px 8px;
-        padding-top: env(safe-area-inset-top, 4px); /* Safe area for top */
+        padding-top: env(safe-area-inset-top, 4px);
     }
     
     .game-header h1 {
@@ -247,16 +243,16 @@ body::after {
     }
     
     .game-controls {
-        min-height: 75px; /* Increased for extra padding */
+        min-height: 75px;
         max-height: 75px;
-        padding: 6px 8px 20px 8px; /* Extra bottom padding */
+        padding: 6px 8px 20px 8px;
     }
     
     .tap-button {
         font-size: 0.7rem;
         min-width: 160px;
         padding: 8px 16px;
-        margin-bottom: 3px; /* Small margin to lift button up */
+        margin-bottom: 3px;
     }
     
     .perfect-message {
@@ -264,7 +260,6 @@ body::after {
     }
 }
 
-/* Landscape Mobile */
 @media screen and (max-height: 500px) and (orientation: landscape) {
     body {
         justify-content: flex-start;
@@ -272,13 +267,13 @@ body::after {
     
     .game-container {
         height: 100vh;
-        height: 100%; /* Fallback */
-        padding-bottom: env(safe-area-inset-bottom, 0px); /* Safe area padding */
+        height: 100%;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
     }
     
     #gameCanvas {
-        height: calc(100vh - 105px); /* 40px header + 65px controls (with extra padding) */
-        height: calc(100% - 105px); /* Fallback */
+        height: calc(100vh - 105px);
+        height: calc(100% - 105px);
         flex: none;
     }
     
@@ -286,7 +281,7 @@ body::after {
         padding: 4px 12px;
         min-height: 40px;
         max-height: 40px;
-        padding-top: env(safe-area-inset-top, 4px); /* Safe area for top */
+        padding-top: env(safe-area-inset-top, 4px);
     }
     
     .game-header h1 {
@@ -299,8 +294,8 @@ body::after {
     }
     
     .game-controls {
-        padding: 6px 12px 18px 12px; /* Extra bottom padding for landscape */
-        min-height: 65px; /* Increased height */
+        padding: 6px 12px 18px 12px;
+        min-height: 65px;
         max-height: 65px;
     }
     
@@ -308,21 +303,19 @@ body::after {
         padding: 8px 16px;
         font-size: 0.7rem;
         min-height: 36px;
-        margin-bottom: 3px; /* Small margin to lift button up */
+        margin-bottom: 3px;
     }
 }
 
 @media (orientation: landscape) {
     .game-container {
-        height: 100vh; /* Ensure full viewport height in landscape */
+        height: 100vh;
         max-height: 100vh;
     }
     body {
-        min-height: 100vh; /* Ensure full viewport height in landscape */
+        min-height: 100vh;
     }
 }
-
-/* Added for perfect placement message */
 .perfect-message {
     position: absolute;
     top: 20%;
@@ -330,12 +323,12 @@ body::after {
     transform: translate(-50%, -50%);
     font-family: 'Candy Beans', cursive;
     font-size: 2.5rem;
-    color: #FF69B4; /* Hot pink */
+    color: #FF69B4;
     text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
     opacity: 0;
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    pointer-events: none; /* So it doesn't interfere with clicks */
-    z-index: 1000; /* Make sure it's on top */
+    pointer-events: none;
+    z-index: 1000;
 }
 
 .perfect-message.show {
