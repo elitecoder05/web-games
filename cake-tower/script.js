@@ -226,11 +226,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const fallingPieces = [];
 
     
+    // Resize canvas function with mobile optimization
     function resizeCanvas() {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
+        // Get the actual container dimensions
+        const container = canvas.parentElement;
         
+        // For mobile devices, calculate precise dimensions
+        if (window.innerWidth <= 480) {
+            const header = document.querySelector('.game-header');
+            const controls = document.querySelector('.game-controls');
+            
+            canvas.width = window.innerWidth;
+            
+            // Calculate available height precisely with extra padding considerations
+            const headerHeight = header.offsetHeight;
+            const controlsHeight = controls.offsetHeight;
+            const availableHeight = window.innerHeight - headerHeight - controlsHeight;
+            
+            // Account for safe areas and extra padding, minimum 200px height
+            canvas.height = Math.max(availableHeight - 20, 200); 
+        } else {
+            // Desktop sizing
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
         
+        // Redraw game state
         if (blocks.length > 0) {
             redrawBlocks();
         } else {
@@ -457,12 +478,30 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resizeCanvas);
     
     
+    // Enhanced touch handling for mobile
     document.addEventListener('touchstart', function(e) {
         if (e.target === canvas || e.target === tapButton) {
             e.preventDefault();
             placeBlock();
         }
     }, {passive: false});
+    
+    // Prevent zoom on double tap
+    document.addEventListener('touchend', function(e) {
+        e.preventDefault();
+    }, {passive: false});
+    
+    // Handle orientation changes
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            resizeCanvas();
+        }, 200); // Increased delay to ensure proper orientation change
+    });
+    
+    // Add load event listener for better mobile compatibility
+    window.addEventListener('load', function() {
+        setTimeout(resizeCanvas, 100);
+    });
     
     
     document.addEventListener('keydown', function(e) {
@@ -472,6 +511,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    
+    // Initial resize
     resizeCanvas();
 });

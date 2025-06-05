@@ -5,6 +5,12 @@
     touch-action: manipulation;
 }
 
+/* Mobile browser optimizations */
+html {
+    height: 100%;
+    height: -webkit-fill-available;
+}
+
 body {
     font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
     background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
@@ -15,13 +21,16 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 .game-container {
-    width: 100%;
-    max-width: 500px; /* Max width for larger screens, but allows shrinking */
-    height: 100%; /* Occupy full height of parent */
-    height: -webkit-fill-available;
+    width: 100vw; /* Full viewport width */
+    max-width: 500px; /* Max width for larger screens */
+    height: 100vh; /* Full viewport height */
+    height: -webkit-fill-available; /* Safari specific */
     display: flex;
     flex-direction: column;
     position: relative;
@@ -30,7 +39,7 @@ body {
 }
 
 .game-header {
-    padding: 10px;
+    padding: 8px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -38,11 +47,13 @@ body {
     color: white;
     border-bottom: 4px solid #ff7e94;
     box-shadow: 0 2px 10px rgba(255, 126, 148, 0.3);
+    min-height: 60px;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 .game-header h1 {
     font-family: 'Candy Beans', cursive;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     animation: bounce 2s infinite;
     letter-spacing: 1px;
@@ -54,10 +65,10 @@ body {
 }
 
 .score {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     background-color: rgba(255, 255, 255, 0.3);
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
 }
@@ -66,17 +77,23 @@ body {
     flex: 1;
     background: linear-gradient(180deg, #ffeef6 0%, #ffe0f0 25%, #fff0f8 50%, #fdf2ff 75%, #f8f0ff 100%);
     width: 100%;
-    height: 100%; /* Ensure canvas takes available space */
+    min-height: 0; /* Allow canvas to shrink */
     display: block;
     box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .game-controls {
-    padding: 15px;
+    padding: 12px 15px 20px 15px; /* Added extra bottom padding */
     text-align: center;
     background: linear-gradient(to right, #FF9AA2, #FFB7B2);
     border-top: 4px solid #ff7e94;
     box-shadow: 0 -2px 10px rgba(255, 126, 148, 0.3);
+    min-height: 70px;
+    flex-shrink: 0; /* Prevent shrinking */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: env(safe-area-inset-bottom, 20px); /* Safe area for phones with notches */
 }
 
 .tap-button {
@@ -84,14 +101,16 @@ body {
     color: white;
     border: none;
     border-radius: 50px;
-    padding: 14px 28px;
-    font-size: 1rem;
+    padding: 12px 24px;
+    font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(255, 92, 122, 0.4);
     transition: all 0.2s;
     text-transform: uppercase;
     letter-spacing: 1px;
+    min-height: 44px; /* iOS minimum touch target */
+    min-width: 200px;
 }
 
 .tap-button:active {
@@ -139,6 +158,158 @@ body::after {
 @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0); }
     50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+/* Mobile Specific Styles */
+@media screen and (max-width: 480px) {
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    body {
+        justify-content: flex-start; /* Align to top instead of center */
+    }
+    
+    .game-container {
+        width: 100vw;
+        height: 100vh;
+        height: 100%; /* Fallback for older browsers */
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+        padding-bottom: env(safe-area-inset-bottom, 0px); /* Safe area padding */
+    }
+    
+    #gameCanvas {
+        /* Calculate height: full viewport minus header and controls with extra space */
+        height: calc(100vh - 130px); /* 50px header + 80px controls (with extra padding) */
+        height: calc(100% - 130px); /* Fallback */
+        flex: none; /* Don't use flex grow on mobile */
+    }
+    
+    .game-header {
+        padding: 6px 12px;
+        min-height: 50px;
+        max-height: 50px;
+        padding-top: env(safe-area-inset-top, 6px); /* Safe area for top */
+    }
+    
+    .game-header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .score {
+        font-size: 0.9rem;
+        padding: 3px 8px;
+    }
+    
+    .game-controls {
+        padding: 8px 12px 25px 12px; /* Extra bottom padding for mobile */
+        min-height: 80px; /* Increased height to accommodate padding */
+        max-height: 80px;
+    }
+    
+    .tap-button {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        min-width: 180px;
+        min-height: 40px;
+        margin-bottom: 5px; /* Small margin to lift button up */
+    }
+    
+    .perfect-message {
+        font-size: 2rem;
+        top: 25%;
+    }
+}
+
+/* Small Mobile Devices */
+@media screen and (max-width: 360px) {
+    #gameCanvas {
+        height: calc(100vh - 120px); /* Adjusted for increased controls height */
+        height: calc(100% - 120px); /* Fallback */
+    }
+    
+    .game-header {
+        min-height: 45px;
+        max-height: 45px;
+        padding: 4px 8px;
+        padding-top: env(safe-area-inset-top, 4px); /* Safe area for top */
+    }
+    
+    .game-header h1 {
+        font-size: 1rem;
+    }
+    
+    .score {
+        font-size: 0.8rem;
+    }
+    
+    .game-controls {
+        min-height: 75px; /* Increased for extra padding */
+        max-height: 75px;
+        padding: 6px 8px 20px 8px; /* Extra bottom padding */
+    }
+    
+    .tap-button {
+        font-size: 0.7rem;
+        min-width: 160px;
+        padding: 8px 16px;
+        margin-bottom: 3px; /* Small margin to lift button up */
+    }
+    
+    .perfect-message {
+        font-size: 1.8rem;
+    }
+}
+
+/* Landscape Mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    body {
+        justify-content: flex-start;
+    }
+    
+    .game-container {
+        height: 100vh;
+        height: 100%; /* Fallback */
+        padding-bottom: env(safe-area-inset-bottom, 0px); /* Safe area padding */
+    }
+    
+    #gameCanvas {
+        height: calc(100vh - 105px); /* 40px header + 65px controls (with extra padding) */
+        height: calc(100% - 105px); /* Fallback */
+        flex: none;
+    }
+    
+    .game-header {
+        padding: 4px 12px;
+        min-height: 40px;
+        max-height: 40px;
+        padding-top: env(safe-area-inset-top, 4px); /* Safe area for top */
+    }
+    
+    .game-header h1 {
+        font-size: 1rem;
+    }
+    
+    .score {
+        font-size: 0.8rem;
+        padding: 2px 6px;
+    }
+    
+    .game-controls {
+        padding: 6px 12px 18px 12px; /* Extra bottom padding for landscape */
+        min-height: 65px; /* Increased height */
+        max-height: 65px;
+    }
+    
+    .tap-button {
+        padding: 8px 16px;
+        font-size: 0.7rem;
+        min-height: 36px;
+        margin-bottom: 3px; /* Small margin to lift button up */
+    }
 }
 
 @media (orientation: landscape) {
