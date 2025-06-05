@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
     const tapButton = document.getElementById('tapButton');
     const scoreDisplay = document.getElementById('score');
+    const gameContainer = document.querySelector('.game-container'); // Get game container for perfect message
 
     
     let score = 0;
@@ -309,10 +310,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentBlock.moving = false;
         
         
-        let overlap = true;
         let newWidth = currentBlock.width;
         let offset = 0;
-        
+        let perfectPlacement = false; // Flag for perfect placement
+
         
         if (currentBlock.x + currentBlock.width < prevBlock.x || 
             currentBlock.x > prevBlock.x + prevBlock.width) {
@@ -320,53 +321,60 @@ document.addEventListener('DOMContentLoaded', () => {
             tapButton.textContent = "GAME OVER - TAP TO RESTART";
             return;
         }
-        
-        
-        if (currentBlock.x < prevBlock.x) {
-            const overhang = prevBlock.x - currentBlock.x;
-            
-            
-            const fallingPiece = new FallingPiece(
-                currentBlock.x,
-                currentBlock.y,
-                overhang,
-                blockHeight,
-                currentBlock.flavor
-            );
-            fallingPieces.push(fallingPiece);
-            
-            
-            newWidth = currentBlock.width - overhang;
-            offset = overhang;
-        } 
-        
-        if (currentBlock.x + currentBlock.width > prevBlock.x + prevBlock.width) {
-            const rightOverhangWidth = currentBlock.x + currentBlock.width - (prevBlock.x + prevBlock.width);
-            const rightOverhangX = prevBlock.x + prevBlock.width;
-            
-            
-            const fallingPiece = new FallingPiece(
-                rightOverhangX,
-                currentBlock.y,
-                rightOverhangWidth,
-                blockHeight,
-                currentBlock.flavor
-            );
-            fallingPieces.push(fallingPiece);
-            
-            
-            if (offset === 0) {
-                newWidth = prevBlock.x + prevBlock.width - currentBlock.x;
-            } else {
+
+        // Check for perfect placement (within a small tolerance)
+        if (Math.abs(currentBlock.x - prevBlock.x) < 0.5 && 
+            Math.abs(currentBlock.width - prevBlock.width) < 0.5) {
+            perfectPlacement = true;
+            // Keep currentBlock.x and currentBlock.width as is, but align to prevBlock for perfect stack
+            currentBlock.x = prevBlock.x;
+            currentBlock.width = prevBlock.width; 
+            showPerfectMessage();
+        } else {
+            if (currentBlock.x < prevBlock.x) {
+                const overhang = prevBlock.x - currentBlock.x;
                 
-                newWidth = prevBlock.width;
+                
+                const fallingPiece = new FallingPiece(
+                    currentBlock.x,
+                    currentBlock.y,
+                    overhang,
+                    blockHeight,
+                    currentBlock.flavor
+                );
+                fallingPieces.push(fallingPiece);
+                
+                
+                newWidth = currentBlock.width - overhang;
+                offset = overhang;
+            } 
+            
+            if (currentBlock.x + currentBlock.width > prevBlock.x + prevBlock.width) {
+                const rightOverhangWidth = currentBlock.x + currentBlock.width - (prevBlock.x + prevBlock.width);
+                const rightOverhangX = prevBlock.x + prevBlock.width;
+                
+                
+                const fallingPiece = new FallingPiece(
+                    rightOverhangX,
+                    currentBlock.y,
+                    rightOverhangWidth,
+                    blockHeight,
+                    currentBlock.flavor
+                );
+                fallingPieces.push(fallingPiece);
+                
+                
+                if (offset === 0) { 
+                    newWidth = prevBlock.x + prevBlock.width - currentBlock.x;
+                } else {
+                    
+                    newWidth = prevBlock.width;
+                }
             }
+            currentBlock.width = newWidth;
+            currentBlock.x += offset;
         }
-        
-        
-        currentBlock.width = newWidth;
-        currentBlock.x += offset;
-        
+
         
         score++;
         scoreDisplay.textContent = score;
@@ -401,6 +409,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function redrawBlocks() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         blocks.forEach(block => block.draw());
+    }
+
+    // Function to show perfect placement message
+    function showPerfectMessage() {
+        let perfectMsg = document.querySelector('.perfect-message');
+        if (!perfectMsg) {
+            perfectMsg = document.createElement('div');
+            perfectMsg.classList.add('perfect-message');
+            gameContainer.appendChild(perfectMsg);
+        }
+        perfectMsg.textContent = "Perfect!";
+        perfectMsg.classList.add('show');
+        setTimeout(() => {
+            perfectMsg.classList.remove('show');
+        }, 1000); // Message visible for 1 second
     }
 
     
