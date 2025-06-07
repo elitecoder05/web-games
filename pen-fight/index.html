@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Pen Fight - Mobile Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-board" id="gameBoard">
+            <div class="game-info">
+                <div class="player-turn" id="playerTurn">Player 1's Turn</div>
+                <div class="score">
+                    <span>Player 1: <span id="score1">0</span></span>
+                    <span>Player 2: <span id="score2">0</span></span>
+                </div>
+            </div>
+            
+            <div class="pen blue-pen" id="bluePen">
+                <img src="assets/blue-pen.png" alt="Blue Pen" draggable="false">
+            </div>
+            
+            <div class="pen red-pen" id="redPen">
+                <img src="assets/red-pen.png" alt="Red Pen" draggable="false">
+            </div>
+            
+            <div class="aim-line" id="aimLine"></div>
+        </div>
+        
+        <div class="instructions">
+            <p>Drag from your pen to aim and release to shoot!</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
