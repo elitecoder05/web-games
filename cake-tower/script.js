@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let blockHeight = 30; 
     let currentStackHeight = 0; 
     let gameStarted = false;
-      const cakeFlavors = [
+      const cakeFlavors = [ 
         { 
             name: 'strawberry', 
             mainColor: '#FF9AA2',
