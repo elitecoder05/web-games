@@ -32,7 +32,7 @@ class PenFightGame {
         this.isDragging = false;
         
         // Progressive difficulty system
-        this.baseMaxForce = 15; // Starting max force
+        this.baseMaxForce = 10; // Starting max force
         this.initialGreenZoneSize = 15; // Initial green zone size - reduced for more challenge
         this.minGreenZoneSize = 8; // Minimum green zone size
         this.totalShots = 0; // Track total shots in the game
@@ -218,7 +218,8 @@ class PenFightGame {
     
     resetPenPositions() {
         const boardRect = this.gameBoard.getBoundingClientRect();
-        const penSize = 120;
+    //   boss
+        const penSize = 140;
         
         // Position blue pen (player 1) - top left area
         this.bluePen.style.left = (boardRect.width * 0.2 - penSize/2) + 'px';
@@ -443,13 +444,15 @@ class PenFightGame {
         const newLeft = currentLeft + pen.velocity.x;
         const newTop = currentTop + pen.velocity.y;
         
-        // Board boundaries - get actual board dimensions
-        const boardRect = this.gameBoard.getBoundingClientRect();
-        const penSize = 120; // Consistent pen size
+        // Get board dimensions (internal dimensions, not including borders)
+        const boardWidth = this.gameBoard.clientWidth;
+        const boardHeight = this.gameBoard.clientHeight;
+        const penSize = 140; // Consistent pen size
         
         // Check if pen falls off the board (award points)
-        if (newLeft < -penSize || newLeft > boardRect.width || 
-            newTop < -penSize || newTop > boardRect.height) {
+        // Only trigger when pen is COMPLETELY outside the board
+        if (newLeft < -penSize || newLeft > boardWidth || 
+            newTop < -penSize || newTop > boardHeight) {
             this.handlePenFallOff(pen);
             return;
         }
@@ -464,11 +467,27 @@ class PenFightGame {
     }
     
     checkCollisions() {
+        // Use center-to-center distance for more accurate collision detection
         const blueRect = this.bluePen.getBoundingClientRect();
         const redRect = this.redPen.getBoundingClientRect();
         
-        // Check if pens are colliding
-        if (this.isColliding(blueRect, redRect)) {
+        // Calculate centers of both pens
+        const blueCenterX = blueRect.left + blueRect.width / 2;
+        const blueCenterY = blueRect.top + blueRect.height / 2;
+        const redCenterX = redRect.left + redRect.width / 2;
+        const redCenterY = redRect.top + redRect.height / 2;
+        
+        // Calculate distance between centers
+        const distance = Math.sqrt(
+            Math.pow(redCenterX - blueCenterX, 2) + 
+            Math.pow(redCenterY - blueCenterY, 2)
+        );
+        
+        // Collision threshold - approximately 80% of pen size for more realistic collision
+        const collisionThreshold = 140 * 0.6; // Reduced from full pen size
+        
+        // Check if pens are actually colliding
+        if (distance < collisionThreshold) {
             this.handlePenCollision();
         }
     }
@@ -576,8 +595,11 @@ class PenFightGame {
         const deltaY = centerY2 - centerY1;
         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         
-        if (distance < 120) { // Minimum separation distance
-            const separationForce = (120 - distance) / 2;
+        // Use the same collision threshold as in checkCollisions
+        const separationThreshold = 140 * 0.6; // Match the collision detection threshold
+        
+        if (distance < separationThreshold) { // Minimum separation distance
+            const separationForce = (separationThreshold - distance) / 2;
             const normalX = deltaX / distance;
             const normalY = deltaY / distance;
             
@@ -594,8 +616,8 @@ class PenFightGame {
     }
     
     updateScoreDisplay() {
-        this.score1El.textContent = this.score[0];
-        this.score2El.textContent = this.score[1];
+        if (this.score1El) this.score1El.textContent = this.score[0];
+        if (this.score2El) this.score2El.textContent = this.score[1];
     }
     
     endGame() {

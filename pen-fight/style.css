@@ -62,10 +62,12 @@ body {
     justify-content: center;
 }
 
+
+/* boss */
 .pen {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     cursor: pointer;
     transition: transform 0.1s ease;
     z-index: 10;
@@ -147,9 +149,11 @@ body {
         max-height: calc(100vh - 100px);
     }
     
+
+    /* boss */
     .pen {
-        width: 70px;
-        height: 70px;
+        width: 90px;
+        height: 90px;
     }
     
     .game-info {
@@ -177,10 +181,12 @@ body {
     .game-board {
         margin: 12px;
     }
+
+    /* boss  */
     
     .pen {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
     }
     
     .player-turn {
